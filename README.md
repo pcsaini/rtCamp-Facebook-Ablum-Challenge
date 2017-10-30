@@ -31,6 +31,9 @@ Create a small PHP-script to accomplish following parts:
        - “Move All”- This button will immediately move all user albums to Google Drive within their respective folders.
    3. Make sure that the user is asked to connect to their Google account only once, no matter how many times they choose to move data.
 
+# Demo
+[Demo](https://rtcamp-facebook-album.herokuapp.com)
+
 
 ## Package
 ### Facebook PHP Graph SDK 
@@ -49,3 +52,28 @@ Install the package using composer:
 composer require google/apiclient:^2.0
 ```
 
+### LightGallery
+[Github Repo](https://github.com/sachinchoolur/lightGallery)
+
+Install the package using composer:
+
+```sh
+$ bower install lightgallery --save
+```
+Or Install all modules together
+``` sh
+$ bower install lightgallery lg-thumbnail lg-autoplay lg-video lg-fullscreen lg-pager lg-zoom lg-hash lg-share
+```
+
+#### npm
+
+find ```lightgallery``` on [npm](http://npmjs.org).
+
+```sh
+$ npm install lightgallery lg-thumbnail lg-autoplay lg-video lg-fullscreen lg-pager lg-zoom lg-hash lg-share
+```
+
+#### CDN
+If you prefer to use a CDN you can load files via [jsdelivr](https://www.jsdelivr.com/projects/lightgallery) or [cdnjs](https://cdnjs.com/libraries/lightgallery)
+
+Here is the [jsdelivr collection](https://cdn.jsdelivr.net/combine/npm/lightgallery,npm/lg-autoplay,npm/lg-fullscreen,npm/lg-hash,npm/lg-pager,npm/lg-share,npm/lg-thumbnail,npm/lg-video,npm/lg-zoom) of lightGallery and its modules.
