@@ -10,7 +10,7 @@ if (!session_id()) {
     session_start();
 }
 if (isset($_SESSION['fb_access_token'])) {
-    header('location: http://localhost/rtcamp/facebook.php');
+    header('location: facebook.php');
     exit;
 }
 

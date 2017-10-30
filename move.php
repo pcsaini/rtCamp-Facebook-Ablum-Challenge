@@ -11,7 +11,7 @@ if (!session_id()) {
 }
 ini_set('max_execution_time', 300);
 if (!isset($_SESSION['fb_access_token'] )) {
-    header('location: http://localhost/rtcamp/index.php');
+    header('location: index.php');
     exit;
 }
 
@@ -73,11 +73,6 @@ function moveToDrive($album_id,$folderId,$drive){
 }
 
 if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
-    //GOOGLE Login
-    $client = new Google_Client();
-    $client->setAuthConfigFile('google.json');
-    $client->setRedirectUri('http://localhost/rtcamp/googleAuth.php');
-    $client->addScope(Google_Service_Drive::DRIVE);
 
     $client->setAccessToken($_SESSION['access_token']);
     if ($client->isAccessTokenExpired()) {

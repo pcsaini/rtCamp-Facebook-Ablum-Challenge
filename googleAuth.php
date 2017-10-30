@@ -7,12 +7,8 @@
  */
 
 session_start();
-require_once 'lib/google/vendor/autoload.php';
 
-$client = new Google_Client();
-$client->setAuthConfigFile('google.json');
-$client->setRedirectUri('http://localhost/rtcamp/googleAuth.php');
-$client->addScope(Google_Service_Drive::DRIVE);
+include 'config.php';
 
 if (! isset($_GET['code'])) {
     $auth_url = $client->createAuthUrl();

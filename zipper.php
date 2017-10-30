@@ -223,6 +223,7 @@ class zipper
             }
             rmdir($directory);
         }
+        return null;
     }
 
 }
