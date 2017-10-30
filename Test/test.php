@@ -6,7 +6,7 @@
  * Time: 1:43 PM
  */
 //include "../zipper.php";
-include 'phpUnit/autoload.php';
+include '../lib/phpUnit/autoload.php';
 include "../zipper.php";
 use PHPUnit\Framework\TestCase;
 
