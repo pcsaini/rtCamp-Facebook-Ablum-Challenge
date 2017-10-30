@@ -3,7 +3,7 @@ $(document).ready(function(){
     function get_selected()
     {
         var chkArray = [];
-        $("#check:checked").each(function() {
+        $(".check:checked").each(function() {
             chkArray.push($(this).val());
         });
         var selected;
@@ -14,8 +14,7 @@ $(document).ready(function(){
 
     $('#download_all').click(function () {
         waitingDialog.show('Please Wait...',{
-            progressType: 'success',
-            dialogSize: 'sm'
+            progressType: 'info'
         });
 
         $.ajax({
@@ -37,8 +36,7 @@ $(document).ready(function(){
     $('#download_selected').click(function () {
         var selected = get_selected();
         waitingDialog.show('Please Wait...',{
-            progressType: 'success',
-            dialogSize: 'sm'
+            progressType: 'info'
         });
 
         $.ajax({
@@ -61,10 +59,8 @@ $(document).ready(function(){
 
     $('.download_album').click(function () {
         var album_id = $(this).data('id');
-        console.log(album_id);
         waitingDialog.show('Please Wait...',{
-            progressType: 'success',
-            dialogSize: 'sm'
+            progressType: 'info'
         });
 
         $.ajax({
@@ -87,8 +83,7 @@ $(document).ready(function(){
 
     $('#move_all').click(function () {
         waitingDialog.show('Please Wait...',{
-            progressType: 'success',
-            dialogSize: 'sm'
+            progressType: 'info'
         });
 
         $.ajax({
@@ -110,8 +105,7 @@ $(document).ready(function(){
     $('#move_selected').click(function () {
         var selected = get_selected();
         waitingDialog.show('Please Wait...',{
-            progressType: 'success',
-            dialogSize: 'sm'
+            progressType: 'info'
         });
 
         $.ajax({
@@ -135,10 +129,8 @@ $(document).ready(function(){
 
     $('.move_album').click(function () {
         var album_id = $(this).data('id');
-        console.log(album_id);
         waitingDialog.show('Please Wait...',{
-            progressType: 'success',
-            dialogSize: 'sm'
+            progressType: 'info'
         });
 
         $.ajax({

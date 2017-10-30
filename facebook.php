@@ -78,6 +78,7 @@ if (!isset($_SESSION['fb_access_token'])) {
 
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/lightgallery.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
@@ -99,6 +100,7 @@ if (!isset($_SESSION['fb_access_token'])) {
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Home</a></li>
                 <li><a href="logout.php">Logout</a></li>
             </ul>
         </div>
@@ -128,10 +130,10 @@ if (!isset($_SESSION['fb_access_token'])) {
             <h3><?php echo $user->getProperty('name'); ?>'s Facebook Albums</h3>
         </div>
         <div class="col-md-12 text-center">
-            <button class="btn btn-primary" id="download_all">Download All</button>
-            <button class="btn btn-primary" id="download_selected">Download Selected</button>
-            <button class="btn btn-primary" id="move_all">Move All</button>
-            <button class="btn btn-primary" id="move_selected">Move Selected</button>
+            <button class="btn btn-primary btn-round" id="download_all">Download All</button>
+            <button class="btn btn-primary btn-round" id="download_selected">Download Selected</button>
+            <button class="btn btn-primary btn-round" id="move_all">Move All</button>
+            <button class="btn btn-primary btn-round" id="move_selected">Move Selected</button>
         </div>
     </div>
     <div class="row">
@@ -151,13 +153,13 @@ if (!isset($_SESSION['fb_access_token'])) {
         foreach ($albums as $album) { ?>
             <div class="col-md-4 col-sm-6 col-xs-12">
                 <div class="album">
-                    <div class="album_img">
+                    <a class="dynamic" data-id="<?php echo $album['id']; ?>">
                         <?php
                         if (isset($album['cover_photo'])) {
                             $cover_photo_id = $album['cover_photo']['id'];
 
                             try {
-                                $photos_request = $fb->get('/' . $album['id'] . '/photos?fields=source');
+                                $photos_request = $fb->get('/' . $album['id'] . '/photos?fields=images');
                                 $photos = $photos_request->getGraphEdge();
                             } catch (Facebook\Exceptions\FacebookResponseException $e) {
                                 echo 'Graph returned an error: ' . $e->getMessage();
@@ -170,24 +172,51 @@ if (!isset($_SESSION['fb_access_token'])) {
                             foreach ($photos as $photo) {
                                 if ($cover_photo_id == $photo['id']) {
                                     $is_cover_photo = True;
-                                    $album_cover_photo = $photo['source'];
+                                    $images = $photo['images'];
+                                    foreach ($images as $image) {
+                                        if ($image['width'] == 320 || $image['height'] == 320) {
+                                            $album_cover_photo = $image['source'];
+                                        }
+                                    }
+
                                 }
                             }
 
-                            echo '<img src="' . $album_cover_photo . '">';
+                            echo '<div class="album_img" style=\'background-image: url("' . $album_cover_photo . '")\'></div>';
                         } else {
-                            echo '<img src="img/blank.png">';
+                            echo '<div class="album_img" style=\'background-image: url("img/blank.png")\'></div>';
                         }
                         ?>
-                    </div>
+                    </a>
+
+                    <a class="dynamic" data-id="<?php echo $album['id']; ?>"><h3><?php echo $album['name'] . ' (' . $album['count'] . ')'; ?></h3></a>
                     <div class="content">
-                        <h3><?php echo $album['name'] . ' (' . $album['count'] . ')'; ?></h3>
-                        <input type="checkbox" id="check" value="<?php echo $album['id']; ?>">
-                        <label for="box-1"> Select</label>
-                        <button class="btn btn-success download_album" data-id="<?php echo $album['id']; ?>">Download
-                        </button>
-                        <button class="btn btn-success move_album" data-id="<?php echo $album['id']; ?>">Move to Drive
-                        </button>
+                        <div class="toggler">
+                            <input id="toggler-<?php echo $album['id']; ?>" name="toggler-1" class="check"
+                                   type="checkbox" value="<?php echo $album['id']; ?>"/>
+                            <label for="toggler-<?php echo $album['id']; ?>">
+                                <svg class="toggler-on" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                     viewbox="0 0 130.2 130.2">
+                                    <polyline class="path check" points="100.2,40.2 51.5,88.8 29.8,67.5 "></polyline>
+                                </svg>
+                                <svg class="toggler-off" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                     viewbox="0 0 130.2 130.2">
+                                    <line class="path line" x1="34.4" y1="34.4" x2="95.8" y2="95.8"></line>
+                                    <line class="path line" x1="95.8" y1="34.4" x2="34.4" y2="95.8"></line>
+                                </svg>
+                            </label>
+                        </div>
+                        <!--<a class="btn btn-primary"><input type="checkbox" class="check" value="<?php /*echo $album['id']; */ ?>">
+                        <label for="box-1"> Select</label></a>-->
+                        <div class="action">
+                            <button class="btn btn-primary btn-round download_album"
+                                    data-id="<?php echo $album['id']; ?>">Download
+                            </button>
+                            <button class="btn btn-primary btn-round move_album" data-id="<?php echo $album['id']; ?>">
+                                Move to Drive
+                            </button>
+                        </div>
+
                     </div>
 
                 </div>
@@ -195,9 +224,7 @@ if (!isset($_SESSION['fb_access_token'])) {
 
             <?php
         }
-
         ?>
-
     </div>
 </div>
 
@@ -211,7 +238,8 @@ if (!isset($_SESSION['fb_access_token'])) {
     </div>
 </footer>
 
-<div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -252,6 +280,33 @@ if (!isset($_SESSION['fb_access_token'])) {
 <script src="js/jquery-3.1.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/showDialog.js"></script>
+<script src="js/lightGallery/lightgallery-all.min.js"></script>
 <script src="js/main.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.dynamic').click(function () {
+            var album_id = $(this).data('id');
+
+            $.ajax({
+                type: 'POST',
+                url: 'photos.php',
+                data: {
+                    album_id: album_id,
+                    photos: ''
+                },
+                success: function (res) {
+                    var srcObj = JSON.parse(res);
+                    $(this).lightGallery({
+                        dynamic: true,
+                        dynamicEl: srcObj
+                    })
+                }
+            });
+
+        })
+    });
+</script>
+
 </body>
 </html>
